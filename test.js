@@ -1,8 +1,34 @@
 const AWS = require('aws-sdk');
 const XLSX = require('xlsx');
 const request = require('request');
+AWS.config.loadFromPath('./config.json');
 
 const workbook = { SheetNames: [], Sheets: {} };
+
+const s3 = new AWS.S3();
+
+const params = {
+  Bucket: 's3-resizing-on-the-fly',
+  // Delimiter: '/',
+  // Marker: '',
+  Prefix: 'allFunds/00646000004SNvqAAG/'
+};
+
+let extCount = 0;
+let intCount = 0;
+
+s3.listObjects(params, (err, resp) => {
+  if (err) console.log('ERR', err);
+  console.log(resp);
+  resp.Contents.forEach(photo => {
+    if (photo.Key.indexOf('exterior') !== -1) {
+      extCount += 1;
+    } else {
+      intCount += 1;
+    }
+  })
+  console.log('ext', extCount, 'int', intCount / 2)
+})
 
 const getAssetsRequest = () => new Promise((resolve, reject) => {
   const reqParams = {
