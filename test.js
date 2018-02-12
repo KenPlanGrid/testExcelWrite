@@ -2,6 +2,8 @@ const AWS = require('aws-sdk');
 const XLSX = require('xlsx');
 const request = require('request');
 
+const workbook = { SheetNames: [], Sheets: {} };
+
 const getAssetsRequest = () => new Promise((resolve, reject) => {
   const reqParams = {
     headers: {
@@ -28,7 +30,9 @@ const toWorkbook = async () => {
   try {
     const assets = await getAssetsRequest();
     console.log(assets.length);
-    const workbook = XLSX.utils.json_to_sheet(assets);
+    const worksheet = XLSX.utils.json_to_sheet(assets);
+    workbook.SheetNames.push('test');
+    workbook.Sheets['test'] = worksheet;
     console.log(workbook);
     XLSX.writeFile(workbook, 'out.xlsb');
 
