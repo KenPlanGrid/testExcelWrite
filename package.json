@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.192.0",
+    "request": "^2.83.0",
     "xlsx": "^0.12.0"
   }
 }
